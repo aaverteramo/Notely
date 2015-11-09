@@ -18,7 +18,7 @@
         .state('notes', {
           url: '/notes',
           // Template replaces contents of the object containing the ui-view attribute.
-          template: '<h1>Notely</h1><p>{{ message }}</p><div ui-view></div>',
+          templateUrl: '/notes/notes.html',
           // Set the controller for this state.
           controller: NotesController
         })
@@ -30,10 +30,10 @@
         })
     }
 
-    NotesController['$inject'] = ['$scope'];
+    NotesController['$inject'] = ['$state'];
     // Define the NotesController
-    function NotesController($scope) {
-      $scope.message = "I <3 Angular!";
+    function NotesController($state) {
+      $state.go('notes.form');
     }
 
 // Invoke the function.
