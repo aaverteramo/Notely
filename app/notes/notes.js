@@ -4,8 +4,6 @@
   angular.module('notely.notes', [
     'ui.router'
   ])
-    //// Create the notes controller.
-    //.controller('NotesController', NotesController)
     // Configure the controller.
     .config(notesConfig);
 
@@ -20,10 +18,16 @@
         .state('notes', {
           url: '/notes',
           // Template replaces contents of the object containing the ui-view attribute.
-          template: '<h1>Notely</h1><p>{{ message }}</p>',
-          //templateUrl: '[URL of local .html file]',
+          template: '<h1>Notely</h1><p>{{ message }}</p><div ui-view></div>',
+          // Set the controller for this state.
           controller: NotesController
-        });
+        })
+        // Create a child-state for the notes form.
+        .state('notes.form', {
+          // use /: to define parameters.
+          url: '/:noteId',
+          templateUrl: '/notes/notes-form.html'
+        })
     }
 
     NotesController['$inject'] = ['$scope'];

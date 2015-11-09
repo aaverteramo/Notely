@@ -1,6 +1,7 @@
 // IFFE for our notely application.
 (function() {
   // Inject dependancy for ui.router into the notely application / module.
+  // ** Array of other modules to include.
   var app = angular.module('notely', [
     'ui.router',
     'notely.notes'
