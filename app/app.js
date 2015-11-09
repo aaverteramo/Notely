@@ -1,22 +1,17 @@
+// IFFE for our notely application.
 (function() {
+  // Inject dependancy for ui.router into the notely application / module.
   var app = angular.module('notely', [
-    'ui.router'
+    'ui.router',
+    'notely.notes'
   ]);
 
-  function config($stateProvider, $urlRouterProvider) {
+  function config($urlRouterProvider) {
+    // If request does not find a valid page, route to '/notes'
     $urlRouterProvider.otherwise('/notes');
-
-    $stateProvider
-
-      .state('notes', {
-        url: '/notes',
-        template: '<h1>Notely</h1><p>{{ message }}</p>',
-        controller: function($scope) {
-          $scope.message = "Welcome to Notely!";
-        }
-      });
   }
 
-  config['$inject'] = ['$stateProvider', '$urlRouterProvider'];
+  config['$inject'] = ['$urlRouterProvider'];
   app.config(config);
+// Invoke the function.
 })();
