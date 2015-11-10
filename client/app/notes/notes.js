@@ -37,7 +37,6 @@
         .then(function() {
         // Callback function should get the result of the async service method.
         // Set a $scope vairable to the result;
-        debugger;
         $scope.notes = NotesService.get();
         //console.log($scope.notes);
       });
