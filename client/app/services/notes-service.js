@@ -15,17 +15,28 @@ function NotesService($http) {
   // Create a placeholder for all of our notes.
   service.notes = [];
   // Create a function to fetch data from the server.
-  service.fetch = function(callback) {
+  // Add a callback parameter: function to run on success.
+  service.fetch = function(onSuccess, onError) {
     // Send an $http get request (promise) to the specified URL.
     $http.get('http://localhost:3000/notes')
       // Create a function to handle the $http response.
-      .success(function(notesData) {
-        service.notes = notesData;
-        if (callback) {
-          // If there is a callback action provided, call it.
-          callback();
-        }
-      });
+      .then(
+        // Success callback.
+        function(response) {
+          service.notes = response.data;
+          if (onSuccess) {
+            // If there is a callback action provided, call it and return the result.
+            onSuccess(service.notes);
+          }
+        },
+        // Failure callback
+        function(response) {
+          // TODO: Handle error.
+          if (onError) {
+            // If there is a callback action provided, call it.
+            onError();
+          }
+        });
   };
   // Create a method to return the NotesService notes array.
   service.get = function() {
