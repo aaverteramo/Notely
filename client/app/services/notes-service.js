@@ -43,4 +43,14 @@ function NotesService($http) {
   service.get = function() {
     return service.notes;
   }
+  // Create a method to save the note to the
+  service.save = function(note) {
+    $http.post('http://localhost:3000/notes', {
+      note: note
+    })
+      .then(function(response) {
+        // Add the saved note to the top of the array.
+        service.notes.unshift(response.data.note);
+      });
+  }
 }

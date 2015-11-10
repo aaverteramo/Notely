@@ -32,7 +32,20 @@
     // Define the NotesController
     NotesController['$inject'] = ['$state', '$scope', 'NotesService'];
     function NotesController($state, $scope, NotesService) {
-      // Call a service method - returns a promise.
+      // Initialize the [edit] note model.
+      $scope.note = {};
+      // Create a function used to save the model.
+      $scope.saveNote = function() {
+        if ($scope.note.title != null && $scope.note.body_html != null) {
+          // Save the note.
+          NotesService.save($scope.note);
+          console.log('saved note!');
+        } else {
+          console.log('cannot save note!');
+        }
+      };
+
+      // Call the service method - returns a promise.
       NotesService.fetch()
         .then(function() {
         // Callback function should get the result of the async service method.
