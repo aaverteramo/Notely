@@ -18,7 +18,8 @@ function NotesService($http) {
   // Add a callback parameter: function to run on success.
   service.fetch = function(onSuccess, onError) {
     // Send an $http get request (promise) to the specified URL.
-    $http.get('http://localhost:3000/notes')
+    // Return the request promise.
+    return $http.get('http://localhost:3000/notes')
       // Create a function to handle the $http response.
       .then(
         // Success callback.

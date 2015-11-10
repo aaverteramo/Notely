@@ -32,11 +32,13 @@
     // Define the NotesController
     NotesController['$inject'] = ['$state', '$scope', 'NotesService'];
     function NotesController($state, $scope, NotesService) {
-      // Call a service method.
-      NotesService.fetch(function(notesData) {
+      // Call a service method - returns a promise.
+      NotesService.fetch()
+        .then(function() {
         // Callback function should get the result of the async service method.
         // Set a $scope vairable to the result;
-        $scope.notes = notesData;
+        debugger;
+        $scope.notes = NotesService.get();
         //console.log($scope.notes);
       });
       $state.go('notes.form');
