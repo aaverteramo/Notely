@@ -6,7 +6,6 @@
   ])
     // Configure the controller.
     .config(notesConfig);
-
     // Assign array of all things to be injected into the notesConfig function.
     // ** Do this to allow minification of our .js
     notesConfig['$inject'] = ['$stateProvider'];
@@ -24,15 +23,22 @@
         })
         // Create a child-state for the notes form.
         .state('notes.form', {
-          // use /: to define parameters.
+          // Use /: to define parameters.
           url: '/:noteId',
           templateUrl: '/notes/notes-form.html'
         })
     }
 
-    NotesController['$inject'] = ['$state'];
     // Define the NotesController
-    function NotesController($state) {
+    NotesController['$inject'] = ['$state', '$scope', 'NotesService'];
+    function NotesController($state, $scope, NotesService) {
+      // Call a service method.
+      NotesService.fetch(function() {
+        // Callback function should get the result of the async service method.
+        // Set a $scope vairable to the result;
+        $scope.notes = NotesService.get();
+        //console.log($scope.notes);
+      });
       $state.go('notes.form');
     }
 

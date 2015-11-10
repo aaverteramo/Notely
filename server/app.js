@@ -2,6 +2,15 @@
 var express = require('express');
 // Get the result of invoking express server.
 var app = express();
+
+//
+app.use(function(request, response, next) {
+  // Add a response header to allow access to all request senders.
+  response.header('Access-Control-Allow-Origin', '*');
+  // Continue on to the next action.
+  next();
+});
+
 //
 app.get('/notes', function(request, response) {
   // Send text.
