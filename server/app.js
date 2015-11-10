@@ -10,20 +10,8 @@ app.use(function(request, response, next) {
   next();
 });
 
-// Get the MongoDB
-var db = require('mongoose');
-// Connect to the database.
-db.connect('mongodb://mongo:password@ds053148.mongolab.com:53148/notelydb');
-// Define a Schema.
-var NoteSchema = db.Schema({
-  title: String,
-  body_html: String,
-  body_text: String,
-  updated_at: { type: Date, default: Date.Now }
-});
-// Create a model with the defined Schema.
-// Pass the singular name of the MongoDB collection object. (e.g. collection = notes, model = note)
-var Note = db.model('Note', NoteSchema);
+// Note model.
+var Note = require('./models/Note');
 
 //
 app.get('/notes', function(request, response) {
