@@ -1,4 +1,5 @@
-
+// Load environment variables.
+require('dotenv').load();
 var express = require('express');
 // Get the result of invoking express server.
 var app = express();
@@ -47,4 +48,5 @@ app.post('/notes', function(request, response) {
 // Have the express server app start listening on a specified port.
 app.listen(3000, function() {
   console.log('Listening on http://localhost:3000');
+  console.log(process.env.DB_URI);
 });

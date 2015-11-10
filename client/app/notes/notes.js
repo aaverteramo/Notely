@@ -39,6 +39,8 @@
         if ($scope.note.title != null && $scope.note.body_html != null) {
           // Save the note.
           NotesService.save($scope.note);
+          // Reinitialize the [edit] note model.
+          $scope.note = {};
           console.log('saved note!');
         } else {
           console.log('cannot save note!');
