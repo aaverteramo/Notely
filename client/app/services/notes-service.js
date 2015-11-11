@@ -8,8 +8,8 @@ angular.module('notely')
 
 // Create the service [function].
 // Inject Dependencies
-NotesService.$inject = ['$http'];
-function NotesService($http) {
+NotesService.$inject = ['$http', 'API_BASE'];
+function NotesService($http, API_BASE) {
   // Create a variable to represent the NotesService, since the meaning of 'this' will change.
   var service = this;
   // Create a placeholder for all of our notes.
@@ -19,7 +19,7 @@ function NotesService($http) {
   service.fetch = function(onSuccess, onError) {
     // Send an $http get request (promise) to the specified URL.
     // Return the request promise.
-    return $http.get('http://localhost:3000/notes')
+    return $http.get(API_BASE + 'notes')
       // Create a function to handle the $http response.
       .then(
         // Success callback.
@@ -59,7 +59,7 @@ function NotesService($http) {
   // Create a method to save the note to the collection.
   service.create = function(note) {
     // Get the promise to return.
-    var promise = $http.post('http://localhost:3000/notes', {
+    var promise = $http.post(API_BASE + 'notes', {
       note: note
     });
     // Do work with the promise in the service.
@@ -74,7 +74,7 @@ function NotesService($http) {
   // Create a method to update an existing note.
   service.update = function(note) {
     // Get the promise to return.
-    var promise = $http.put('http://localhost:3000/notes/' + note._id, {
+    var promise = $http.put(API_BASE + 'notes/' + note._id, {
       // Only specify fields that can be updated from the client side.
       note: {
         title: note.title,
@@ -93,7 +93,7 @@ function NotesService($http) {
   // Create a method to delete an existing note.
   service.delete = function(note) {
     // Delete the note.
-    var promise = $http.delete('http://localhost:3000/notes/' + note._id);
+    var promise = $http.delete(API_BASE + 'notes/' + note._id);
     // Do work with the promise in the service.
     promise.then(function(response) {
       // Remove the deleted note from the array.

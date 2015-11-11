@@ -106,3 +106,7 @@ span.login {
 
 .ta-editor {
   margin-top: 0.5em; }
+
+.btn_delete:hover {
+  cursor: pointer;
+}
