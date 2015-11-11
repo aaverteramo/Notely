@@ -2,7 +2,8 @@
 (function() {
   // Add a notes module to the main notely module.
   angular.module('notely.notes', [
-    'ui.router'
+    'ui.router',
+    'textAngular'
   ])
     // Configure the controller.
     .config(notesConfig);
