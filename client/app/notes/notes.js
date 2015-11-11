@@ -61,7 +61,11 @@
           if ($scope.note._id) {
             // Update an existing note.
             console.log('Need to update the note.');
-            NotesService.update($scope.note);
+            NotesService.update($scope.note)
+              .then(function(response) {
+                // Reset the $scope.note so we have the scrubbed body_html.
+                $scope.note = angular.copy(response.data.note);
+              });
           }
           else {
             if ($scope.note.title && $scope.note.body_html) {
