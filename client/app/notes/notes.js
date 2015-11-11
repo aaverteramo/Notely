@@ -81,6 +81,14 @@
             }
           }
       };
+
+      $scope.delete = function() {
+        // Delete the note.
+        NotesService.delete($scope.note)
+          .then(function(response) {
+            $state.go('notes.form', { noteId: undefined });
+          });
+      }
     }
 
 // Invoke the function.

@@ -65,6 +65,22 @@ app.put('/notes/:id', function(request, response) {
         })
     });
 });
+// Delete an existing note.
+app.delete('/notes/:id', function(request, response) {
+  // Find the one document in the MongoDB collection.
+  Note.findOne({ _id: request.params.id })
+    // The promise returned has a note if a note is found.
+    // Remove the note from the collection.
+    .then(function(note) {
+      // Remove the note.
+      note.remove()
+        .then(function() {
+          response.json({
+            messge: 'Your note has been removed.'
+          })
+        })
+    });
+});
 // Have the express server app start listening on a specified port.
 app.listen(3000, function() {
   console.log('Listening on http://localhost:3000');

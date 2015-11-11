@@ -71,6 +71,7 @@ function NotesService($http) {
     promise.then(function(response) {
       // Add the saved note to the top of the array.
       service.notes.unshift(response.data.note);
+      console.log('Note has been created!');
     });
     // Return the promise.
     return promise;
@@ -94,11 +95,33 @@ function NotesService($http) {
     // Return the promise.
     return promise;
   };
+  // Create a method to delete an existing note.
+  service.delete = function(note) {
+    // Delete the note.
+    var promise = $http.delete('http://localhost:3000/notes/' + note._id);
+    // Do work with the promise in the service.
+    promise.then(function(response) {
+      // Remove the deleted note from the array.
+      service.removeNote(note);
+      console.log('Note has been deleted!');
+    });
+    // Return the promise.
+    return promise;
+  };
   // Replace a note in the array.
   service.replaceNote = function(note) {
     for (var i = 0; i < service.notes.length; i++) {
       if (service.notes[i]._id === note._id) {
         service.notes[i] = note;
+      }
+    }
+  };
+  // Remove a note from the array.
+  service.removeNote = function(note) {
+    for (var i = 0; i < service.notes.length; i++) {
+      if (service.notes[i]._id === note._id) {
+        // Remove the array item at the provided index.
+        service.notes.splice(i, 1);
       }
     }
   };
