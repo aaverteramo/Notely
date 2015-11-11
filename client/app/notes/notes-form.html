@@ -7,15 +7,9 @@
   </p>
   <div class="form-actions">
     <input type="submit" name="commit" value="Save" class="btn btn-default">
-    <a class="btn" ng-click="delete()">
+    <a class="btn" ng-show="note._id" ng-click="delete()">
       <i class="fa fa-trash-o"></i>
     </a>
   </div>
 </li>
 </form>
-<p>
-  {{ note.body_text }}
-</p>
-<p>
-  {{ note.body_html }}
-</p>
