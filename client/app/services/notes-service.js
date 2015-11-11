@@ -48,7 +48,10 @@ function NotesService($http) {
     // Find the note in service.notes with a matching _id.
     for (var i = 0; i < service.notes.length; i++) {
       if (service.notes[i]._id === noteId) {
-        return service.notes[i];
+        // Use angular to return a copy of the object.
+        return angular.copy(service.notes[i]);
+        // Use JSON to return a copy of the object.
+        //return JSON.parse(JSON.stringify(service.notes[i]));
       }
     }
     return {};
