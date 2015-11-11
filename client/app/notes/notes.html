@@ -10,7 +10,7 @@
         <ul id="notes">
           <!-- ng-repeat syntax **ORDER IS IMPORTANT** -->
           <!-- ng-repeat="thing in things | orderBy: '[-]attributeOfThing' track by thing.distinctAttribute" -->
-          <li ng-repeat="note in notes">
+          <li ng-repeat="note in notes | orderBy: '-updated_at' track by note._id">
             <a class="note" ui-sref="notes.form({ noteId: note._id })">{{ note.title }}</a>
           </li>
         </ul>

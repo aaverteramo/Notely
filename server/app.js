@@ -8,7 +8,7 @@ app.use(function(request, response, next) {
   // Add a response header to allow access to all request senders, CORS.
   response.header('Access-Control-Allow-Origin', '*');
   // Allow methods.
-  //response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH')
+  response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   // Continue on to the next action.
   next();
@@ -25,7 +25,7 @@ var Note = require('./models/Note');
 app.get('/notes', function(request, response) {
   // Use Model.find() to retrieve objects from a MongoDB collection.
   // Add .sort({ attribute: [-]1 }) to return an ordered array by the attribute.
-  Note.find().sort({ updated_at: 'asc' }).then(function(notes) {
+  Note.find().sort({ updated_at: 'desc' }).then(function(notes) {
     // Set the response to the array of notes returned from the collection.
     response.json(notes);
   });
@@ -44,6 +44,25 @@ app.post('/notes', function(request, response) {
         message: 'Saved!',
         note: noteData
       })
+    });
+});
+// Update an existing note.
+app.put('/notes/:id', function(request, response) {
+  // Find the one document in the MongoDB collection.
+  Note.findOne({ _id: request.params.id })
+    // The promise returned has a note if a note is found.
+    // Replace returned note with attribute values from the request note object.
+    .then(function(note) {
+      note.title = request.body.note.title;
+      note.body_html = request.body.note.body_html;
+      // Save the note.
+      note.save()
+        .then(function() {
+          response.json({
+            messge: 'Your changes have been saved.',
+            note: note
+          })
+        })
     });
 });
 // Have the express server app start listening on a specified port.

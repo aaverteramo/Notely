@@ -57,15 +57,25 @@
 
       // Create a function used to save the model.
       $scope.saveNote = function() {
-        if ($scope.note.title != null && $scope.note.body_html != null) {
-          // Save the note.
-          NotesService.save($scope.note);
-          // Reinitialize the [edit] note model.
-          $scope.note = {};
-          console.log('saved note!');
-        } else {
-          console.log('cannot save note!');
-        }
+          // Decide whether to call create or update.
+          if ($scope.note._id) {
+            // Update an existing note.
+            console.log('Need to update the note.');
+            NotesService.update($scope.note);
+          }
+          else {
+            if ($scope.note.title && $scope.note.body_html) {
+              // Create the note.
+              NotesService.create($scope.note)
+                .then(function(response) {
+                  $state.go('notes.form', { noteId: response.data.note._id });
+                });
+              console.log('saved note!');
+            }
+            else {
+              console.log('cannot save note!');
+            }
+          }
       };
     }
 
