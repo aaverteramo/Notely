@@ -9,7 +9,7 @@
 
   function config($urlRouterProvider) {
     // If request does not find a valid page, route to '/notes'
-    $urlRouterProvider.otherwise('/notes');
+    $urlRouterProvider.otherwise('/notes/');
   }
 
   config['$inject'] = ['$urlRouterProvider'];

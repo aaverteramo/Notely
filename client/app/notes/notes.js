@@ -12,7 +12,7 @@
     // Configure the notes controller.
     function notesConfig($stateProvider) {
       $stateProvider
-        // State is similar to a URL / Page
+        // State is similar to a URL / Page / ROute
         // Notes - #/notes
         .state('notes', {
           url: '/notes',
@@ -54,8 +54,11 @@
         // Set a $scope vairable to the result;
         $scope.notes = NotesService.get();
         //console.log($scope.notes);
+
+        // Test NotesService
+        var note = NotesService.findById('564242afe4b0af6681f0c971');
+        console.log(note.title);
       });
-      $state.go('notes.form');
     }
 
 // Invoke the function.

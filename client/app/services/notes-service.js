@@ -43,6 +43,16 @@ function NotesService($http) {
   service.get = function() {
     return service.notes;
   }
+  // Create a method to return a single note by searching by id.
+  service.findById = function(noteId) {
+    // Find the note in service.notes with a matching _id.
+    for (var i = 0; i < service.notes.length; i++) {
+      if (service.notes[i]._id === noteId) {
+        return service.notes[i];
+      }
+    }
+    return {};
+  }
   // Create a method to save the note to the
   service.save = function(note) {
     $http.post('http://localhost:3000/notes', {
