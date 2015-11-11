@@ -5,7 +5,7 @@ var NoteSchema = db.Schema({
   title: String,
   body_html: String,
   body_text: String,
-  updated_at: { type: Date, default: Date.Now }
+  updated_at: { type: Date, default: Date.now }
 });
 // Allow the Schema to be returned when calling require('thisfile.js')
 module.exports = NoteSchema;

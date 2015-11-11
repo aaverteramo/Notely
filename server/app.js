@@ -24,7 +24,8 @@ var Note = require('./models/Note');
 // Get notes.
 app.get('/notes', function(request, response) {
   // Use Model.find() to retrieve objects from a MongoDB collection.
-  Note.find().then(function(notes) {
+  // Add .sort({ attribute: [-]1 }) to return an ordered array by the attribute.
+  Note.find().sort({ updated_at: 'asc' }).then(function(notes) {
     // Set the response to the array of notes returned from the collection.
     response.json(notes);
   });
