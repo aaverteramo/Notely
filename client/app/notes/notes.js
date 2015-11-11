@@ -8,14 +8,24 @@
     .config(notesConfig);
     // Assign array of all things to be injected into the notesConfig function.
     // ** Do this to allow minification of our .js
-    notesConfig['$inject'] = ['$stateProvider'];
+    notesConfig.$inject = ['$stateProvider'];
     // Configure the notes controller.
     function notesConfig($stateProvider) {
       $stateProvider
-        // State is similar to a URL / Page / ROute
+        // State is similar to a URL / Page / Route
         // Notes - #/notes
         .state('notes', {
           url: '/notes',
+          // Provide a function to run before the controller is loaded.
+          // If any of the functions in 'resolve' returns a promise, that promise must be resolved before continuing on.
+          resolve: {
+            // Define the action to complete before continuing on to the Controller.
+            // Inject arguments into the function using array annotation.
+            notesLoaded: ['NotesService', function(NotesService) {
+              // Get all notes.
+              return NotesService.fetch();
+            }]
+          },
           // Template replaces contents of the object containing the ui-view attribute.
           templateUrl: '/notes/notes.html',
           // Set the controller for this state.
@@ -25,15 +35,26 @@
         .state('notes.form', {
           // Use /: to define parameters.
           url: '/:noteId',
-          templateUrl: '/notes/notes-form.html'
+          templateUrl: '/notes/notes-form.html',
+          controller: NotesFormController
         })
     }
 
     // Define the NotesController
-    NotesController['$inject'] = ['$state', '$scope', 'NotesService'];
+    NotesController.$inject = ['$state', '$scope', 'NotesService'];
     function NotesController($state, $scope, NotesService) {
-      // Initialize the [edit] note model.
       $scope.note = {};
+      // Callback function should get the result of the async service method.
+      // Set a $scope vairable to the result;
+      $scope.notes = NotesService.get();
+    }
+
+    // Create the NotesFormController
+    NotesFormController.$inject = ['$scope', '$state', 'NotesService'];
+    function NotesFormController($scope, $state, NotesService) {
+      // Use the $state.params to get all params declared in the .state definitions.
+      $scope.note = NotesService.findById($state.params.noteId);
+
       // Create a function used to save the model.
       $scope.saveNote = function() {
         if ($scope.note.title != null && $scope.note.body_html != null) {
@@ -46,19 +67,6 @@
           console.log('cannot save note!');
         }
       };
-
-      // Call the service method - returns a promise.
-      NotesService.fetch()
-        .then(function() {
-        // Callback function should get the result of the async service method.
-        // Set a $scope vairable to the result;
-        $scope.notes = NotesService.get();
-        //console.log($scope.notes);
-
-        // Test NotesService
-        var note = NotesService.findById('564242afe4b0af6681f0c971');
-        console.log(note.title);
-      });
     }
 
 // Invoke the function.
