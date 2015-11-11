@@ -1,4 +1,4 @@
-<form ng-submit="saveNote()">
+<form ng-submit="save()">
   <p>
     <input type="text" name="title" id="note_title" placeholder="title your note" ng-model="note.title">
   </p>
@@ -7,7 +7,9 @@
   </p>
   <div class="form-actions">
     <input type="submit" name="commit" value="Save" class="btn btn-default">
-    <button type="button" name="delete" value="Delete" class="btn btn-danger" ng-click="delete()">Delete</button>
+    <a class="btn" ng-click="delete()">
+      <i class="fa fa-trash-o"></i>
+    </a>
   </div>
 </li>
 </form>

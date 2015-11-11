@@ -39,14 +39,9 @@ function NotesService($http) {
           }
         });
   };
-  // Create a method to return the NotesService notes array, or a specified note in the array by Id.
-  service.get = function(noteId) {
-    if (noteId) {
-      // Find a note in the array by id.
-    }
-    else {
+  // Create a method to return the NotesService notes array.
+  service.get = function() {
       return service.notes;
-    }
   };
   // Create a method to return a single note by searching by id.
   service.findById = function(noteId) {

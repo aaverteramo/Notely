@@ -56,7 +56,7 @@
       $scope.note = NotesService.findById($state.params.noteId);
 
       // Create a function used to save the model.
-      $scope.saveNote = function() {
+      $scope.save = function() {
           // Decide whether to call create or update.
           if ($scope.note._id) {
             // Update an existing note.
