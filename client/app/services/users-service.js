@@ -1,7 +1,7 @@
 // Use the existing notely module.
 angular.module('notely')
   // Create a new service, inject the dependencies.
-  .service('UsersService', ['$http', 'API_BASE', ($http, API_BASE) => {
+  .service('UsersService', ['$http', 'API_BASE', 'AuthToken', 'CurrentUser', ($http, API_BASE, AuthToken, CurrentUser) => {
     class UsersService {
       // Create a user.
       create(user) {
@@ -11,7 +11,11 @@ angular.module('notely')
         });
         // Do work with the promise in the service.
         promise.then((response) => {
-          console.log(response.data);
+          // Set the AuthToken
+          AuthToken.set(response.data.auth_token);
+          // Set the currentUser.
+          CurrentUser.set(response.data.user);
+          //console.log(response.data);
         });
         // Return the promise.
         return promise;

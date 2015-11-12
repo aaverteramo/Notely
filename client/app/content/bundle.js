@@ -160,6 +160,106 @@ angular.module('notely')
 
   // Invoke the function.
 })();
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+angular.module('notely')
+// Create a new service for auth_token.
+// Pass in the current $window
+.service('AuthToken', ['$window', function ($window) {
+  var AuthToken = (function () {
+    function AuthToken() {
+      _classCallCheck(this, AuthToken);
+
+      // Get the authToken from local storage, if it exists.
+      this.authToken = $window.localStorage.getItem('authToken');
+    }
+
+    // Return an instance of the service.
+
+    // Set the authToken attribute and the local storage item.
+
+    _createClass(AuthToken, [{
+      key: 'set',
+      value: function set(token) {
+        this.authToken = token;
+        $window.localStorage.setItem('authToken', this.authToken);
+      }
+
+      // Get the authToken attribute.
+    }, {
+      key: 'get',
+      value: function get() {
+        return this.authToken || {};
+      }
+
+      // Clear the authToken attribute and the local storage item.
+    }, {
+      key: 'clear',
+      value: function clear() {
+        this.authToken = undefined;
+        $window.localStorage.removeItem('authToken');
+      }
+    }]);
+
+    return AuthToken;
+  })();
+
+  return new AuthToken();
+}]);
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+angular.module('notely')
+// Create a new service for auth_token.
+// Pass in the current $window
+.service('CurrentUser', ['$window', function ($window) {
+  var CurrentUser = (function () {
+    function CurrentUser() {
+      _classCallCheck(this, CurrentUser);
+
+      // Get the authToken from local storage, if it exists.
+      this.currentUser = JSON.parse($window.localStorage.getItem('currentUser'));
+    }
+
+    // Return an instance of the service.
+
+    // Set the authToken attribute and the local storage item.
+
+    _createClass(CurrentUser, [{
+      key: 'set',
+      value: function set(user) {
+        this.currentUser = user;
+        $window.localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+      }
+
+      // Get the authToken attribute.
+    }, {
+      key: 'get',
+      value: function get() {
+        return this.currentUser || {};
+      }
+
+      // Clear the authToken attribute and the local storage item.
+    }, {
+      key: 'clear',
+      value: function clear() {
+        this.currentUser = undefined;
+        $window.localStorage.removeItem('currentUser');
+      }
+    }]);
+
+    return CurrentUser;
+  })();
+
+  return new CurrentUser();
+}]);
 // Create a service.js to communicate with the server.
 // This can be used by multiple controllers to CRUD data.
 
@@ -294,7 +394,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 angular.module('notely')
 // Create a new service, inject the dependencies.
-.service('UsersService', ['$http', 'API_BASE', function ($http, API_BASE) {
+.service('UsersService', ['$http', 'API_BASE', 'AuthToken', 'CurrentUser', function ($http, API_BASE, AuthToken, CurrentUser) {
   var UsersService = (function () {
     function UsersService() {
       _classCallCheck(this, UsersService);
@@ -313,7 +413,11 @@ angular.module('notely')
         });
         // Do work with the promise in the service.
         promise.then(function (response) {
-          console.log(response.data);
+          // Set the AuthToken
+          AuthToken.set(response.data.auth_token);
+          // Set the currentUser.
+          CurrentUser.set(response.data.user);
+          //console.log(response.data);
         });
         // Return the promise.
         return promise;
