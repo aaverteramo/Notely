@@ -89,7 +89,11 @@
           .then(function(response) {
             $state.go('notes.form', { noteId: undefined });
           });
-      }
+      };
+
+      $scope.buttonText = function() {
+        return $scope.note._id ? 'Save Changes' : 'Save';
+      };
     }
 
 // Invoke the function.
