@@ -7,10 +7,11 @@ var NoteSchema = db.Schema({
   title: String,
   body_html: String,
   body_text: String,
+  user: { type: db.Schema.Types.ObjectId, ref: 'User' },
   updated_at: { type: Date, default: Date.now() }
 });
 // Define pre-execution steps for the specified method.
-NoteSchema.pre('save', function(next) {  
+NoteSchema.pre('save', function(next) {
   this.body_html = sanitizeHtml(this.body_html);
   this.body_text = htmlToText.fromString(this.body_html);
   this.updated_at = Date.now();

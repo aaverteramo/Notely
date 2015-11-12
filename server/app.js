@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 // Use all functions exposed in the headers.js file.
 app.use(require('./middleware/headers'));
+app.use(require('./middleware/add-user-to-request'));
 // Use custom routers.
 app.use('/api/v1/notes', require('./routers/notes-router'));
 app.use('/api/v1/users', require('./routers/users-router'));

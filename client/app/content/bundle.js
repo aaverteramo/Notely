@@ -162,6 +162,28 @@ angular.module('notely')
 })();
 'use strict';
 
+angular.module('notely').factory('AuthInterceptor', ['AuthToken', 'API_BASE', function (AuthToken, API_BASE) {
+  return {
+    // Create a function for this as a request interceptor.
+    request: function request(config) {
+      var token = AuthToken.get();
+      if (token && config.url.indexOf(API_BASE) > -1) {
+        config.headers['Authorization'] = token;
+        console.log(token);
+      }
+      return config;
+    }
+  };
+}]);
+
+angular.module('notely')
+// Instruct config to use AuthInterceptor as an interceptor.
+.config(['$httpProvider', function ($httpProvider) {
+  // Add the AuthInterceptor to the array of interceptors.
+  return $httpProvider.interceptors.push('AuthInterceptor');
+}]);
+'use strict';
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }

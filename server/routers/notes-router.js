@@ -6,7 +6,7 @@ var Note = require('../models/note');
 router.get('/', function(request, response) {
   // Use Model.find() to retrieve objects from a MongoDB collection.
   // Add .sort({ attribute: [-]1 }) to return an ordered array by the attribute.
-  Note.find().sort({ updated_at: 'desc' }).then(function(notes) {
+  Note.find({ user: request.user }).sort({ updated_at: 'desc' }).then(function(notes) {
     // Set the response to the array of notes returned from the collection.
     response.json(notes);
   });
@@ -16,7 +16,8 @@ router.post('/', function(request, response) {
   // Create a new Note object from the request body.
   var note = new Note({
     title: request.body.note.title,
-    body_html: request.body.note.body_html
+    body_html: request.body.note.body_html,
+    user: request.user
   });
   // MongoDB knows to save the note to the collection.
   note.save()
@@ -30,7 +31,7 @@ router.post('/', function(request, response) {
 // Update an existing note.
 router.put('/:id', function(request, response) {
   // Find the one document in the MongoDB collection.
-  Note.findOne({ _id: request.params.id })
+  Note.findOne({ _id: request.params.id, user: request.user })
     // The promise returned has a document if a note is found.
     // Replace returned document model with attribute values from the request body object.
     .then(function(note) {
@@ -49,7 +50,7 @@ router.put('/:id', function(request, response) {
 // Delete an existing note.
 router.delete('/:id', function(request, response) {
   // Find the one document in the MongoDB collection.
-  Note.findOne({ _id: request.params.id })
+  Note.findOne({ _id: request.params.id, user: request.user })
     // The promise returned has a note if a note is found.
     // Remove the note from the collection.
     .then(function(note) {
