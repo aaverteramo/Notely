@@ -17,6 +17,49 @@
   app.constant('API_BASE', 'http://localhost:3000/api/v1/');
   // Invoke the function.
 })();
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+angular.module('notely')
+// Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
+.directive('signUp', function () {
+
+  // Declare the controller as an ES6 class.
+
+  var SignUpController = (function () {
+    function SignUpController() {
+      _classCallCheck(this, SignUpController);
+
+      this.user = {};
+    }
+
+    // Definte the behavior of the directive.
+
+    _createClass(SignUpController, [{
+      key: 'submit',
+      value: function submit() {
+        alert('click!' + JSON.stringify(this.user));
+        console.log(this.user);
+      }
+    }]);
+
+    return SignUpController;
+  })();
+
+  return {
+    // Give each instance of the directive its own scope.
+    scope: {},
+    controller: SignUpController,
+    // Inside the directive's view, we can refer to the controller as 'ctrl'.
+    controllerAs: 'ctrl',
+    // Isolates the scope defined here.
+    bindToController: true,
+    templateUrl: '/components/sign-up.html'
+  };
+});
 // Create IIFE for the Notes page.
 'use strict';
 
@@ -236,4 +279,18 @@ function NotesService($http, API_BASE) {
     }
   };
 }
+'use strict';
+
+(function () {
+  angular.module('notely').config(usersConfig);
+
+  usersConfig.$inject = ['$stateProvider'];
+  function usersConfig($stateProvider) {
+    $stateProvider.state('sign-up', {
+      url: '/sign-up',
+      // Use a directive we have defined ourselves.
+      template: '<sign-up></sign-up>'
+    });
+  };
+})();
 //# sourceMappingURL=bundle.js.map
