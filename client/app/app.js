@@ -15,6 +15,6 @@
   config['$inject'] = ['$urlRouterProvider'];
   app.config(config);
   // Add an API_BASE constant to the app to represent the main server url.
-  app.constant('API_BASE', 'http://localhost:3000/');
+  app.constant('API_BASE', 'http://localhost:3000/api/v1/');
 // Invoke the function.
 })();
