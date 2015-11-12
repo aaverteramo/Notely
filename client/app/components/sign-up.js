@@ -9,7 +9,16 @@ angular.module('notely')
       }
       submit() {
         // Create the user.
-        UsersService.create(this.user);
+        UsersService.create(this.user)
+          .then(
+            function(response) {
+              // success
+              console.log('success');
+            },
+            function(response) {
+              // failure
+              console.log('failure');
+            });
       }
     }
 

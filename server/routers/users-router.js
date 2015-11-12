@@ -1,5 +1,6 @@
 // Get the router from the express server.
 var router = require('express').Router();
+var bcrypt = require('bcryptjs');
 var User = require('../models/user');
 // // Get an existing user: authenticate.
 // router.get('/', function(request, response) {
@@ -25,7 +26,8 @@ router.post('/', function(request, response) {
   // Create a new model object from the request body.
   var user = new User({
     username: request.body.user.username,
-    name: request.body.user.name
+    name: request.body.user.name,
+    password_digest: bcrypt.hashSync(request.body.user.password)
   });
   // // MongoDB knows to save the note to the collection.
   // response.json({
