@@ -25,7 +25,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 angular.module('notely')
 // Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
-.directive('signUp', function () {
+.directive('signUp', ['UsersService', function (UsersService) {
 
   // Declare the controller as an ES6 class.
 
@@ -41,8 +41,8 @@ angular.module('notely')
     _createClass(SignUpController, [{
       key: 'submit',
       value: function submit() {
-        alert('click!' + JSON.stringify(this.user));
-        console.log(this.user);
+        // Create the user.
+        UsersService.create(this.user);
       }
     }]);
 
@@ -59,7 +59,7 @@ angular.module('notely')
     bindToController: true,
     templateUrl: '/components/sign-up.html'
   };
-});
+}]);
 // Create IIFE for the Notes page.
 'use strict';
 
@@ -279,6 +279,46 @@ function NotesService($http, API_BASE) {
     }
   };
 }
+// Use the existing notely module.
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+angular.module('notely')
+// Create a new service, inject the dependencies.
+.service('UsersService', ['$http', 'API_BASE', function ($http, API_BASE) {
+  var UsersService = (function () {
+    function UsersService() {
+      _classCallCheck(this, UsersService);
+    }
+
+    // Return an instance of the service class.
+
+    _createClass(UsersService, [{
+      key: 'create',
+
+      // Create a user.
+      value: function create(user) {
+        // Get the promise to return.
+        var promise = $http.post(API_BASE + 'users', {
+          user: user
+        });
+        // Do work with the promise in the service.
+        promise.then(function (response) {
+          console.log(response.data.user);
+        });
+        // Return the promise.
+        return promise;
+      }
+    }]);
+
+    return UsersService;
+  })();
+
+  return new UsersService();
+}]);
 'use strict';
 
 (function () {

@@ -1,6 +1,6 @@
 angular.module('notely')
   // Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
-  .directive('signUp', () => {
+  .directive('signUp', ['UsersService', (UsersService) => {
 
     // Declare the controller as an ES6 class.
     class SignUpController {
@@ -8,8 +8,8 @@ angular.module('notely')
         this.user = {};
       }
       submit() {
-        alert('click!' + JSON.stringify(this.user));
-        console.log(this.user);
+        // Create the user.
+        UsersService.create(this.user);
       }
     }
 
@@ -24,4 +24,4 @@ angular.module('notely')
       bindToController: true,
       templateUrl: '/components/sign-up.html'
     };
-  });
+  }]);

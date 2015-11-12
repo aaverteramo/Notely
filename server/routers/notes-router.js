@@ -31,8 +31,8 @@ router.post('/', function(request, response) {
 router.put('/:id', function(request, response) {
   // Find the one document in the MongoDB collection.
   Note.findOne({ _id: request.params.id })
-    // The promise returned has a note if a note is found.
-    // Replace returned note with attribute values from the request note object.
+    // The promise returned has a document if a note is found.
+    // Replace returned document model with attribute values from the request body object.
     .then(function(note) {
       note.title = request.body.note.title;
       note.body_html = request.body.note.body_html;
