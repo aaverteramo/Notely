@@ -313,7 +313,7 @@ angular.module('notely')
         });
         // Do work with the promise in the service.
         promise.then(function (response) {
-          console.log(response.data.user);
+          console.log(response.data);
         });
         // Return the promise.
         return promise;

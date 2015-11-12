@@ -1,6 +1,7 @@
 // Get the router from the express server.
 var router = require('express').Router();
 var bcrypt = require('bcryptjs');
+var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 // // Get an existing user: authenticate.
 // router.get('/', function(request, response) {
@@ -38,8 +39,14 @@ router.post('/', function(request, response) {
     .then(function(userData) {
       response.json({
         message: 'Thanks for signing up!',
-        user: userData
-      })
+        user: userData,
+        // Generate an authentication token.
+        // Set it to expire every day.
+        auth_token: jwt.sign(userData._id, process.env.JWT_SECRET, {
+          // Number of seconds for token to expire.
+          expiresIn: 60*60*24
+        })
+      });
     });
 });
 // Expose the express router through the 'require' function.
