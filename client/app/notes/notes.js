@@ -48,6 +48,14 @@
       // Callback function should get the result of the async service method.
       // Set a $scope vairable to the result;
       $scope.notes = NotesService.get();
+
+      $scope.login = function() {
+        console.log('Login clicked!');
+      };
+
+      $scope.logout = function() {
+        console.log('Logout clicked :(');
+      };
     }
 
     // Create the NotesFormController

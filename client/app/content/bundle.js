@@ -66,6 +66,58 @@ angular.module('notely')
     templateUrl: '/components/sign-up.html'
   };
 }]);
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+angular.module('notely')
+// Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
+.directive('appHead', ['CurrentUser', function (CurrentUser) {
+
+  // Declare the controller as an ES6 class.
+
+  var AppHeadController = (function () {
+    function AppHeadController() {
+      _classCallCheck(this, AppHeadController);
+
+      this.user = CurrentUser.get();
+    }
+
+    // Definte the behavior of the directive.
+
+    _createClass(AppHeadController, [{
+      key: 'buttonText',
+      value: function buttonText() {
+        return this.user._id ? 'Logout' : 'Login';
+      }
+    }, {
+      key: 'loginState',
+      value: function loginState() {
+        if (this.user._id) {
+          // Logout.
+          CurrentUser.clear();
+        } else {
+          // Redirect to login screen.
+        }
+      }
+    }]);
+
+    return AppHeadController;
+  })();
+
+  return {
+    // Give each instance of the directive its own scope.
+    scope: {},
+    controller: AppHeadController,
+    // Inside the directive's view, we can refer to the controller as 'ctrl'.
+    controllerAs: 'ctrl',
+    // Isolates the scope defined here.
+    bindToController: true,
+    templateUrl: '/components/user-links.html'
+  };
+}]);
 // Create IIFE for the Notes page.
 'use strict';
 
@@ -115,6 +167,14 @@ angular.module('notely')
     // Callback function should get the result of the async service method.
     // Set a $scope vairable to the result;
     $scope.notes = NotesService.get();
+
+    $scope.login = function () {
+      console.log('Login clicked!');
+    };
+
+    $scope.logout = function () {
+      console.log('Logout clicked :(');
+    };
   }
 
   // Create the NotesFormController
@@ -159,6 +219,20 @@ angular.module('notely')
   }
 
   // Invoke the function.
+})();
+'use strict';
+
+(function () {
+  angular.module('notely').config(usersConfig);
+
+  usersConfig.$inject = ['$stateProvider'];
+  function usersConfig($stateProvider) {
+    $stateProvider.state('sign-up', {
+      url: '/sign-up',
+      // Use a directive we have defined ourselves.
+      template: '<sign-up></sign-up>'
+    });
+  };
 })();
 'use strict';
 
@@ -451,18 +525,4 @@ angular.module('notely')
 
   return new UsersService();
 }]);
-'use strict';
-
-(function () {
-  angular.module('notely').config(usersConfig);
-
-  usersConfig.$inject = ['$stateProvider'];
-  function usersConfig($stateProvider) {
-    $stateProvider.state('sign-up', {
-      url: '/sign-up',
-      // Use a directive we have defined ourselves.
-      template: '<sign-up></sign-up>'
-    });
-  };
-})();
 //# sourceMappingURL=bundle.js.map
