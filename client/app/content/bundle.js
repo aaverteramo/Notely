@@ -76,7 +76,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 angular.module('notely')
 // Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
-.directive('signUp', ['UsersService', function (UsersService) {
+.directive('signUp', ['$state', 'UsersService', function ($state, UsersService) {
 
   // Declare the controller as an ES6 class.
 
@@ -95,7 +95,7 @@ angular.module('notely')
         // Create the user.
         UsersService.create(this.user).then(function (response) {
           // success
-          console.log('success');
+          $state.go('notes.form', { noteId: undefined });
         }, function (response) {
           // failure
           console.log('failure');
@@ -145,11 +145,6 @@ angular.module('notely')
       key: 'signedIn',
       value: function signedIn() {
         return !!this.user()._id;
-      }
-    }, {
-      key: 'buttonText',
-      value: function buttonText() {
-        return this.signedIn() ? 'Logout' : 'Login';
       }
     }, {
       key: 'logout',

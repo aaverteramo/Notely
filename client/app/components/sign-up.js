@@ -1,6 +1,6 @@
 angular.module('notely')
   // Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
-  .directive('signUp', ['UsersService', (UsersService) => {
+  .directive('signUp', ['$state', 'UsersService', ($state, UsersService) => {
 
     // Declare the controller as an ES6 class.
     class SignUpController {
@@ -13,7 +13,7 @@ angular.module('notely')
           .then(
             function(response) {
               // success
-              console.log('success');
+              $state.go('notes.form', { noteId: undefined });
             },
             function(response) {
               // failure

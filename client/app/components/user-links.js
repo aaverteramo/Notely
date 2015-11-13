@@ -13,9 +13,6 @@ angular.module('notely')
       signedIn() {
         return !!(this.user()._id);
       };
-      buttonText() {
-        return this.signedIn() ? 'Logout' : 'Login';
-      };
       logout() {
         this.AuthToken.clear();
         this.CurrentUser.clear();
