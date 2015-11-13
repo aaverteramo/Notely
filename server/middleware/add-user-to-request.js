@@ -6,8 +6,8 @@ module.exports = function(request, respose, next) {
   var authToken = request.headers.authorization;
   var isLoggingInOrRegistering = request.body.user;
   // Check if there is an authToken and if the user is logging in or registering (user object is passed in the request).
-  console.log(authToken);
-  console.log(isLoggingInOrRegistering);
+  console.log('authToken: ' + authToken);
+  console.log('isLoggingInOrRegistering: ' + isLoggingInOrRegistering);
   if (authToken && !isLoggingInOrRegistering) {
     // Decode user ID from JWT token, and find user.
     jwt.verify(authToken, process.env.JWT_SECRET,

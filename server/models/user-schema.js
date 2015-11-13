@@ -1,3 +1,4 @@
+var bcrypt = require('bcryptjs');
 var db = require('../config/db');
 
 // Define a Schema.
@@ -20,6 +21,12 @@ UserSchema.methods.toJSON = function() {
   delete object.password_digest;
   delete object.__v;
   return object;
+};
+
+UserSchema.methods.authenticate = function(password, callback) {
+  bcrypt.compare(password, this.password_digest, function(err, isMatch) {
+    callback(isMatch);
+  });
 };
 
 // Allow the Schema to be returned when calling require('thisfile.js')

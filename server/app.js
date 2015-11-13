@@ -13,6 +13,7 @@ app.use(require('./middleware/add-user-to-request'));
 // Use custom routers.
 app.use('/api/v1/notes', require('./routers/notes-router'));
 app.use('/api/v1/users', require('./routers/users-router'));
+app.use('/api/v1/sessions', require('./routers/sessions-router'));
 // Have the express server app start listening on a specified port.
 app.listen(3000, function() {
   console.log('Listening on http://localhost:3000');

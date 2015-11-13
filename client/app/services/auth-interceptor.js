@@ -5,9 +5,10 @@ angular.module('notely')
         // Create a function for this as a request interceptor.
         request: function(config) {
           var token = AuthToken.get();
+          console.log(token);
+          console.log(config.url);
           if (token && config.url.indexOf(API_BASE) > -1) {
             config.headers['Authorization'] = token;
-            console.log(token);
           }
           return config;
         }

@@ -9,6 +9,10 @@
         url: '/sign-up',
         // Use a directive we have defined ourselves.
         template: '<sign-up></sign-up>'
+      })
+      .state('sign-in', {
+        url: '/sign-in',
+        template: '<sign-in></sign-in>'
       });
   };
 })();

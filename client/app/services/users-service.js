@@ -21,13 +21,14 @@ angular.module('notely')
         return promise;
       };
       // Get a user, login.
-      get(user) {
+      login(user) {
         // Get the promise to return.
-        let promise = $http.get(`${API_BASE}users`, {
+        let promise = $http.post(`${API_BASE}sessions`, {
           user: user
         });
         // Do work with the promise in the service.
         promise.then((response) => {
+          console.log('it worked!');
           // Set the AuthToken
           AuthToken.set(response.data.auth_token);
           // Set the currentUser.

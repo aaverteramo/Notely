@@ -25,24 +25,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 angular.module('notely')
 // Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
-.directive('login', ['$state', 'UsersService', function ($state, UsersService) {
+.directive('signIn', ['$state', 'UsersService', function ($state, UsersService) {
 
   // Declare the controller as an ES6 class.
 
-  var LoginController = (function () {
-    function LoginController() {
-      _classCallCheck(this, LoginController);
+  var SignInController = (function () {
+    function SignInController() {
+      _classCallCheck(this, SignInController);
 
       this.user = {};
     }
 
     // Definte the behavior of the directive.
 
-    _createClass(LoginController, [{
-      key: 'submit',
-      value: function submit() {
+    _createClass(SignInController, [{
+      key: 'login',
+      value: function login() {
         // Get the user, login.
-        UsersService.get(this.user).then(function (response) {
+        UsersService.login(this.user).then(function (response) {
           // success
           console.log('success');
           // Redirect to the notes page.
@@ -54,18 +54,18 @@ angular.module('notely')
       }
     }]);
 
-    return LoginController;
+    return SignInController;
   })();
 
   return {
     // Give each instance of the directive its own scope.
     scope: {},
-    controller: LoginController,
+    controller: SignInController,
     // Inside the directive's view, we can refer to the controller as 'ctrl'.
     controllerAs: 'ctrl',
     // Isolates the scope defined here.
     bindToController: true,
-    templateUrl: '/components/login.html'
+    templateUrl: '/components/sign-in.html'
   };
 }]);
 'use strict';
@@ -281,9 +281,10 @@ angular.module('notely').factory('AuthInterceptor', ['AuthToken', 'API_BASE', fu
     // Create a function for this as a request interceptor.
     request: function request(config) {
       var token = AuthToken.get();
+      console.log(token);
+      console.log(config.url);
       if (token && config.url.indexOf(API_BASE) > -1) {
         config.headers['Authorization'] = token;
-        console.log(token);
       }
       return config;
     }
@@ -559,16 +560,17 @@ angular.module('notely')
         return promise;
       }
     }, {
-      key: 'get',
+      key: 'login',
 
       // Get a user, login.
-      value: function get(user) {
+      value: function login(user) {
         // Get the promise to return.
-        var promise = $http.get(API_BASE + 'users', {
+        var promise = $http.post(API_BASE + 'sessions', {
           user: user
         });
         // Do work with the promise in the service.
         promise.then(function (response) {
+          console.log('it worked!');
           // Set the AuthToken
           AuthToken.set(response.data.auth_token);
           // Set the currentUser.
@@ -596,6 +598,9 @@ angular.module('notely')
       url: '/sign-up',
       // Use a directive we have defined ourselves.
       template: '<sign-up></sign-up>'
+    }).state('sign-in', {
+      url: '/sign-in',
+      template: '<sign-in></sign-in>'
     });
   };
 })();
