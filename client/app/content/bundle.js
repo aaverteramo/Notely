@@ -44,9 +44,7 @@ angular.module('notely')
         // Get the user, login.
         UsersService.login(this.user).then(function (response) {
           // success
-          console.log('success');
-          // Redirect to the notes page.
-          $state.go('notes');
+          $state.go('notes.form', { noteId: response.data.user._id });
         }, function (response) {
           // failure
           console.log('failure :(');
@@ -98,7 +96,7 @@ angular.module('notely')
           $state.go('notes.form', { noteId: undefined });
         }, function (response) {
           // failure
-          console.log('failure');
+          console.log('failure :(');
         });
       }
     }]);
@@ -146,12 +144,6 @@ angular.module('notely')
       value: function signedIn() {
         return !!this.user()._id;
       }
-    }, {
-      key: 'logout',
-      value: function logout() {
-        this.AuthToken.clear();
-        this.CurrentUser.clear();
-      }
     }]);
 
     return UserLinksController;
@@ -169,7 +161,7 @@ angular.module('notely')
     // Isolates the scope defined here.
     bindToController: true,
     //templateUrl: '/components/user-links.html'
-    template: '\n        <div class="user-links">\n          <div ng-show="ctrl.signedIn()">\n            Signed in as {{ctrl.user().username}}\n            |\n            <a href="#" ng-click="ctrl.logout()">Logout</a>\n          </div>\n          <div ng-show="!ctrl.signedIn()">\n            <a href="#">Login</a>\n          </div>\n        </div>\n      '
+    template: '\n        <div class="user-links">\n          <div ng-show="ctrl.signedIn()">\n            Signed in as {{ctrl.user().username}}\n            |\n            <a href="#" ui-sref="log-out">Logout</a>\n          </div>\n          <div ng-show="!ctrl.signedIn()">\n            <a href="#" ui-sref="sign-in">Login</a>\n            |\n            <a href="#" ui-sref="sign-up">Create Account</a>\n          </div>\n        </div>\n      '
   };
 });
 // Create IIFE for the Notes page.
@@ -221,14 +213,6 @@ angular.module('notely')
     // Callback function should get the result of the async service method.
     // Set a $scope vairable to the result;
     $scope.notes = NotesService.get();
-
-    $scope.login = function () {
-      console.log('Login clicked!');
-    };
-
-    $scope.logout = function () {
-      console.log('Logout clicked :(');
-    };
   }
 
   // Create the NotesFormController
@@ -242,7 +226,6 @@ angular.module('notely')
       // Decide whether to call create or update.
       if ($scope.note._id) {
         // Update an existing note.
-        console.log('Need to update the note.');
         NotesService.update($scope.note).then(function (response) {
           // Reset the $scope.note so we have the scrubbed body_html.
           $scope.note = angular.copy(response.data.note);
@@ -253,7 +236,6 @@ angular.module('notely')
           NotesService.create($scope.note).then(function (response) {
             $state.go('notes.form', { noteId: response.data.note._id });
           });
-          console.log('saved note!');
         } else {
           console.log('cannot save note!');
         }
@@ -601,6 +583,13 @@ angular.module('notely')
     }).state('sign-in', {
       url: '/sign-in',
       template: '<sign-in></sign-in>'
+    }).state('log-out', {
+      url: '/log-out',
+      controller: ['$state', 'AuthToken', 'CurrentUser', function ($state, AuthToken, CurrentUser) {
+        AuthToken.clear();
+        CurrentUser.clear();
+        $state.go('sign-in');
+      }]
     });
   };
 })();

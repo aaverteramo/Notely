@@ -2,7 +2,8 @@
   <div class="row">
     <div class="col-xs-6 col-xs-offset-4">
       <h3>Login to Notely</h3>
-      <form id="sign-in"
+      <form
+        class="user_form"
         ng-submit="ctrl.login()">
         <p>
           <!-- <label for="username">Username</label><br> -->
@@ -19,7 +20,7 @@
         <input type="submit" name="commit" value="Login" class="btn btn-default">
         <span class="login">
           Don't have an account?
-          <a href="#">Create an account.</a>
+          <a href="#" ui-sref="sign-up">Create an account.</a>
         </span>
       </form>
     </div>

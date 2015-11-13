@@ -17,7 +17,7 @@ angular.module('notely')
             },
             function(response) {
               // failure
-              console.log('failure');
+              console.log('failure :(');
             });
       }
     }

@@ -87,8 +87,8 @@ ul#notes {
     ul#notes li a.note:hover {
       color: white; }
 
-#new_user input[type="text"],
-#new_user input[type="password"] {
+.user_form input[type="text"],
+.user_form input[type="password"] {
   width: 300px;
   font-size: 120%;
   border-radius: 4px;
@@ -109,7 +109,4 @@ span.login {
 
 .btn_delete:hover {
   cursor: pointer;
-}
-.btn_delete {
-  include: .fa, .fa-trash-o;
 }

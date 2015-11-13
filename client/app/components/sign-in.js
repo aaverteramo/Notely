@@ -13,9 +13,7 @@ angular.module('notely')
           .then(
             function(response) {
               // success
-              console.log('success');
-              // Redirect to the notes page.
-              $state.go('notes');
+              $state.go('notes.form', { noteId: response.data.user._id });
             },
             function(response) {
               // failure

@@ -48,14 +48,6 @@
       // Callback function should get the result of the async service method.
       // Set a $scope vairable to the result;
       $scope.notes = NotesService.get();
-
-      $scope.login = function() {
-        console.log('Login clicked!');
-      };
-
-      $scope.logout = function() {
-        console.log('Logout clicked :(');
-      };
     }
 
     // Create the NotesFormController
@@ -69,7 +61,6 @@
           // Decide whether to call create or update.
           if ($scope.note._id) {
             // Update an existing note.
-            console.log('Need to update the note.');
             NotesService.update($scope.note)
               .then(function(response) {
                 // Reset the $scope.note so we have the scrubbed body_html.
@@ -83,7 +74,6 @@
                 .then(function(response) {
                   $state.go('notes.form', { noteId: response.data.note._id });
                 });
-              console.log('saved note!');
             }
             else {
               console.log('cannot save note!');

@@ -13,10 +13,6 @@ angular.module('notely')
       signedIn() {
         return !!(this.user()._id);
       };
-      logout() {
-        this.AuthToken.clear();
-        this.CurrentUser.clear();
-      };
     }
     UserLinksController.$inject = ['AuthToken', 'CurrentUser'];
 
@@ -35,10 +31,12 @@ angular.module('notely')
           <div ng-show="ctrl.signedIn()">
             Signed in as {{ctrl.user().username}}
             |
-            <a href="#" ng-click="ctrl.logout()">Logout</a>
+            <a href="#" ui-sref="log-out">Logout</a>
           </div>
           <div ng-show="!ctrl.signedIn()">
-            <a href="#">Login</a>
+            <a href="#" ui-sref="sign-in">Login</a>
+            |
+            <a href="#" ui-sref="sign-up">Create Account</a>
           </div>
         </div>
       `
