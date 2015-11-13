@@ -1,6 +1,7 @@
 <header>
   <div class="well">
     Notely
-    <button type="button" name="btnUserState" ng-click="ctrl.loginState()">{{ ctrl.buttonText() }}</button>
+    <label ng-model="ctrl.user.username"></label>
+    <button type="button" name="btnUserState" class="pull-right" ng-click="ctrl.loginState()">{{ ctrl.buttonText() }}</button>
   </div>
 </header>

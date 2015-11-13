@@ -25,6 +25,57 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 angular.module('notely')
 // Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
+.directive('login', ['$state', 'UsersService', function ($state, UsersService) {
+
+  // Declare the controller as an ES6 class.
+
+  var LoginController = (function () {
+    function LoginController() {
+      _classCallCheck(this, LoginController);
+
+      this.user = {};
+    }
+
+    // Definte the behavior of the directive.
+
+    _createClass(LoginController, [{
+      key: 'submit',
+      value: function submit() {
+        // Get the user, login.
+        UsersService.get(this.user).then(function (response) {
+          // success
+          console.log('success');
+          // Redirect to the notes page.
+          $state.go('notes');
+        }, function (response) {
+          // failure
+          console.log('failure :(');
+        });
+      }
+    }]);
+
+    return LoginController;
+  })();
+
+  return {
+    // Give each instance of the directive its own scope.
+    scope: {},
+    controller: LoginController,
+    // Inside the directive's view, we can refer to the controller as 'ctrl'.
+    controllerAs: 'ctrl',
+    // Isolates the scope defined here.
+    bindToController: true,
+    templateUrl: '/components/login.html'
+  };
+}]);
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+angular.module('notely')
+// Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
 .directive('signUp', ['UsersService', function (UsersService) {
 
   // Declare the controller as an ES6 class.
@@ -74,50 +125,58 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 angular.module('notely')
 // Always declare directives using camelCase. The directive in mark up will be 'dasherized'.
-.directive('appHead', ['CurrentUser', function (CurrentUser) {
-
+.directive('userLinks', function () {
   // Declare the controller as an ES6 class.
 
-  var AppHeadController = (function () {
-    function AppHeadController() {
-      _classCallCheck(this, AppHeadController);
+  var UserLinksController = (function () {
+    function UserLinksController(AuthToken, CurrentUser) {
+      _classCallCheck(this, UserLinksController);
 
-      this.user = CurrentUser.get();
+      this.AuthToken = AuthToken;
+      this.CurrentUser = CurrentUser;
     }
 
-    // Definte the behavior of the directive.
-
-    _createClass(AppHeadController, [{
-      key: 'buttonText',
-      value: function buttonText() {
-        return this.user._id ? 'Logout' : 'Login';
+    _createClass(UserLinksController, [{
+      key: 'user',
+      value: function user() {
+        return this.CurrentUser.get();
       }
     }, {
-      key: 'loginState',
-      value: function loginState() {
-        if (this.user._id) {
-          // Logout.
-          CurrentUser.clear();
-        } else {
-          // Redirect to login screen.
-        }
+      key: 'signedIn',
+      value: function signedIn() {
+        return !!this.user()._id;
+      }
+    }, {
+      key: 'buttonText',
+      value: function buttonText() {
+        return this.signedIn() ? 'Logout' : 'Login';
+      }
+    }, {
+      key: 'logout',
+      value: function logout() {
+        this.AuthToken.clear();
+        this.CurrentUser.clear();
       }
     }]);
 
-    return AppHeadController;
+    return UserLinksController;
   })();
 
+  UserLinksController.$inject = ['AuthToken', 'CurrentUser'];
+
+  // Definte the behavior of the directive.
   return {
     // Give each instance of the directive its own scope.
     scope: {},
-    controller: AppHeadController,
+    controller: UserLinksController,
     // Inside the directive's view, we can refer to the controller as 'ctrl'.
     controllerAs: 'ctrl',
     // Isolates the scope defined here.
     bindToController: true,
-    templateUrl: '/components/user-links.html'
+    //templateUrl: '/components/user-links.html'
+    template: '\n        <div class="user-links">\n          <div ng-show="ctrl.signedIn()">\n            Signed in as {{ctrl.user().username}}\n            |\n            <a href="#" ng-click="ctrl.logout()">Logout</a>\n          </div>\n          <div ng-show="!ctrl.signedIn()">\n            <a href="#">Login</a>\n          </div>\n        </div>\n      '
   };
-}]);
+});
 // Create IIFE for the Notes page.
 'use strict';
 
@@ -219,20 +278,6 @@ angular.module('notely')
   }
 
   // Invoke the function.
-})();
-'use strict';
-
-(function () {
-  angular.module('notely').config(usersConfig);
-
-  usersConfig.$inject = ['$stateProvider'];
-  function usersConfig($stateProvider) {
-    $stateProvider.state('sign-up', {
-      url: '/sign-up',
-      // Use a directive we have defined ourselves.
-      template: '<sign-up></sign-up>'
-    });
-  };
 })();
 'use strict';
 
@@ -518,6 +563,26 @@ angular.module('notely')
         // Return the promise.
         return promise;
       }
+    }, {
+      key: 'get',
+
+      // Get a user, login.
+      value: function get(user) {
+        // Get the promise to return.
+        var promise = $http.get(API_BASE + 'users', {
+          user: user
+        });
+        // Do work with the promise in the service.
+        promise.then(function (response) {
+          // Set the AuthToken
+          AuthToken.set(response.data.auth_token);
+          // Set the currentUser.
+          CurrentUser.set(response.data.user);
+          //console.log(response.data);
+        });
+        // Return the promise.
+        return promise;
+      }
     }]);
 
     return UsersService;
@@ -525,4 +590,18 @@ angular.module('notely')
 
   return new UsersService();
 }]);
+'use strict';
+
+(function () {
+  angular.module('notely').config(usersConfig);
+
+  usersConfig.$inject = ['$stateProvider'];
+  function usersConfig($stateProvider) {
+    $stateProvider.state('sign-up', {
+      url: '/sign-up',
+      // Use a directive we have defined ourselves.
+      template: '<sign-up></sign-up>'
+    });
+  };
+})();
 //# sourceMappingURL=bundle.js.map

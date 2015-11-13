@@ -110,3 +110,6 @@ span.login {
 .btn_delete:hover {
   cursor: pointer;
 }
+.btn_delete {
+  include: .fa, .fa-trash-o;
+}
