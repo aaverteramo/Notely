@@ -22,10 +22,40 @@
           resolve: {
             // Define the action to complete before continuing on to the Controller.
             // Inject arguments into the function using array annotation.
-            notesLoaded: ['NotesService', function(NotesService) {
-              // Get all notes.
-              return NotesService.fetch();
-            }]
+            notesLoaded: ['$state', '$q', '$timeout', 'NotesService', 'CurrentUser',
+              // Add authentication to the /notes root.
+              // $q is an angular service, used to return custom promises.
+              // **REMEMBER: Anything that calls a function that returns a promise can have .then(). <-- asynchronous.
+              function($state, $q, $timeout, NotesService, CurrentUser) {
+                // Get the deferred API.
+                let deferred = $q.defer();
+                $timeout(function() {
+                  // User must be signed in.
+                  if (CurrentUser.isSignedIn()) {
+                    // Get all notes.
+                    NotesService.fetch().then(
+                      function() {
+                        // Success, resolve the promise.
+                        // The .then(success) will get called after return.
+                        deferred.resolve();
+                      },
+                      function() {
+                        // Failed, reject the promise.
+                        // The .then(error) will get called after return.
+                        deferred.reject();
+                        $state.go('sign-in');
+                      }
+                    );
+                  }
+                  else {
+                    // Failed, reject the promise.
+                    deferred.reject();
+                    $state.go('sign-in');
+                  }
+                });
+                // Send the promise back to calling function.
+                return deferred.promise;
+              }]
           },
           // Template replaces contents of the object containing the ui-view attribute.
           templateUrl: '/notes/notes.html',
