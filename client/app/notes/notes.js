@@ -36,12 +36,12 @@
                     NotesService.fetch().then(
                       function() {
                         // Success, resolve the promise.
-                        // The .then(success) will get called after return.
+                        // Basically, flags the .then(success) to be get called after return.
                         deferred.resolve();
                       },
                       function() {
                         // Failed, reject the promise.
-                        // The .then(error) will get called after return.
+                        // Basically, flags the .then(error) to get called after return.
                         deferred.reject();
                         $state.go('sign-in');
                       }
