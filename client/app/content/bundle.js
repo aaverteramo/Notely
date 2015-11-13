@@ -4,7 +4,7 @@
 (function () {
   // Inject dependancy for ui.router into the notely application / module.
   // ** Array of other modules to include.
-  var app = angular.module('notely', ['ui.router', 'notely.notes']);
+  var app = angular.module('notely', ['ui.router', 'notely.notes', 'flash']);
 
   function config($urlRouterProvider) {
     // If request does not find a valid page, route to '/notes'
@@ -169,7 +169,7 @@ angular.module('notely')
 
 (function () {
   // Add a notes module to the main notely module.
-  angular.module('notely.notes', ['ui.router', 'textAngular'])
+  angular.module('notely.notes', ['ui.router', 'textAngular', 'flash'])
   // Configure the controller.
   .config(notesConfig);
   // Assign array of all things to be injected into the notesConfig function.
@@ -241,8 +241,8 @@ angular.module('notely')
   }
 
   // Create the NotesFormController
-  NotesFormController.$inject = ['$scope', '$state', 'NotesService'];
-  function NotesFormController($scope, $state, NotesService) {
+  NotesFormController.$inject = ['$scope', '$state', 'Flash', 'NotesService'];
+  function NotesFormController($scope, $state, Flash, NotesService) {
     // Use the $state.params to get all params declared in the .state definitions.
     $scope.note = NotesService.findById($state.params.noteId);
 
@@ -254,6 +254,9 @@ angular.module('notely')
         NotesService.update($scope.note).then(function (response) {
           // Reset the $scope.note so we have the scrubbed body_html.
           $scope.note = angular.copy(response.data.note);
+          Flash.create('success', response.data.message);
+        }, function (response) {
+          Flash.create('danger', response.data.message);
         });
       } else {
         if ($scope.note.title && $scope.note.body_html) {
@@ -271,6 +274,9 @@ angular.module('notely')
       // Delete the note.
       NotesService['delete']($scope.note).then(function (response) {
         $state.go('notes.form', { noteId: undefined });
+        Flash.create('success', response.data.message);
+      }, function (response) {
+        Flash.create('danger', response.data.message);
       });
     };
 
@@ -544,7 +550,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 angular.module('notely')
 // Create a new service, inject the dependencies.
-.service('UsersService', ['$http', 'API_BASE', 'AuthToken', 'CurrentUser', function ($http, API_BASE, AuthToken, CurrentUser) {
+.service('UsersService', ['$http', 'Flash', 'API_BASE', 'AuthToken', 'CurrentUser', function ($http, Flash, API_BASE, AuthToken, CurrentUser) {
   var UsersService = (function () {
     function UsersService() {
       _classCallCheck(this, UsersService);
@@ -567,7 +573,6 @@ angular.module('notely')
           AuthToken.set(response.data.auth_token);
           // Set the currentUser.
           CurrentUser.set(response.data.user);
-          //console.log(response.data);
         });
         // Return the promise.
         return promise;
@@ -582,13 +587,17 @@ angular.module('notely')
           user: user
         });
         // Do work with the promise in the service.
-        promise.then(function (response) {
-          console.log('it worked!');
+        promise.then(
+        // Success.
+        function (response) {
           // Set the AuthToken
           AuthToken.set(response.data.auth_token);
           // Set the currentUser.
           CurrentUser.set(response.data.user);
-          //console.log(response.data);
+        },
+        // Error.
+        function (response) {
+          Flash.create('danger', response.data.message);
         });
         // Return the promise.
         return promise;

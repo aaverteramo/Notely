@@ -30,17 +30,13 @@ router.post('/', function(request, response) {
           }
           else {
             // Passwords don't match.
-            response.json({
-              message: 'We were unable to log you in with those credentials.'
-            });
+            response.send(500, { message: 'We were unable to log you in with those credentials.' });
           }
         });
       }
       else {
         // Couldn't find a user by that username.
-        response.json({
-          message: 'We were unable to log you in with those credentials.'
-        });
+        response.send(500, { message: 'We were unable to log you in with those credentials.' });
       }
     });
 });

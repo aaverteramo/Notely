@@ -3,7 +3,8 @@
   // Add a notes module to the main notely module.
   angular.module('notely.notes', [
     'ui.router',
-    'textAngular'
+    'textAngular',
+    'flash'
   ])
     // Configure the controller.
     .config(notesConfig);
@@ -81,8 +82,8 @@
     }
 
     // Create the NotesFormController
-    NotesFormController.$inject = ['$scope', '$state', 'NotesService'];
-    function NotesFormController($scope, $state, NotesService) {
+    NotesFormController.$inject = ['$scope', '$state', 'Flash', 'NotesService'];
+    function NotesFormController($scope, $state, Flash, NotesService) {
       // Use the $state.params to get all params declared in the .state definitions.
       $scope.note = NotesService.findById($state.params.noteId);
 
@@ -91,11 +92,16 @@
           // Decide whether to call create or update.
           if ($scope.note._id) {
             // Update an existing note.
-            NotesService.update($scope.note)
-              .then(function(response) {
+            NotesService.update($scope.note).then(
+              function(response) {
                 // Reset the $scope.note so we have the scrubbed body_html.
                 $scope.note = angular.copy(response.data.note);
-              });
+                Flash.create('success', response.data.message);
+              },
+              function(response) {
+                Flash.create('danger', response.data.message);
+              }
+            );
           }
           else {
             if ($scope.note.title && $scope.note.body_html) {
@@ -113,10 +119,15 @@
 
       $scope.delete = function() {
         // Delete the note.
-        NotesService.delete($scope.note)
-          .then(function(response) {
+        NotesService.delete($scope.note).then(
+          function(response) {
             $state.go('notes.form', { noteId: undefined });
-          });
+            Flash.create('success', response.data.message);
+          },
+          function(response) {
+            Flash.create('danger', response.data.message);
+          }
+        );
       };
 
       $scope.buttonText = function() {

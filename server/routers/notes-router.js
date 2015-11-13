@@ -41,7 +41,7 @@ router.put('/:id', function(request, response) {
       note.save()
         .then(function() {
           response.json({
-            messge: 'Your changes have been saved.',
+            message: 'Your changes have been saved.',
             note: note
           })
         })
@@ -58,7 +58,7 @@ router.delete('/:id', function(request, response) {
       note.remove()
         .then(function() {
           response.json({
-            messge: 'Your note has been removed.'
+            message: 'Your note has been removed.'
           })
         })
     });
